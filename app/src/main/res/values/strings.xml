@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">rtnv</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="tickerSymbol">Ticker Symbol</string>
+    <string name="numberOfShares">Number of Shares</string>
+    <string name="valueOfEachShare">Value of Each Share</string>
+    <string name="calculatedNetValue">Calculated Net Value</string>
+    <string name="enterButton">Enter</string>
+    <string name="deleteButton">Delete</string>
+    <string name="nextButton">Next</string>
+    <string name="calculateNetValueButton">Calculate Net Value</string>
+
+</resources>
