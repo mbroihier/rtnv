@@ -2,14 +2,11 @@ package com.example.broihier.rtnv;
 
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,13 +20,12 @@ public class UpdateQuotes {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-	    String ticker;
-		DefaultHttpClient client = new DefaultHttpClient();
-		HttpGet getRequest = null;
-		String result = null;
-		
-      public void setTicker(String _ticker) {
-    /* setTicker - method that sets the ticker that is to be read from the web                                       */
+	String ticker;
+	URL getRequest = null;
+	String result = null;
+
+	public void setTicker(String _ticker) {
+	/* setTicker - method that sets the ticker that is to be read from the web                                       */
     /* ============================================================================================================= */
     /* ------------------------------------------------------------------------------------------------------------- */
     /*                                                                                                               */
@@ -61,12 +57,11 @@ public class UpdateQuotes {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-    	  ticker = _ticker;
-  	  getRequest = new HttpGet("http://finance.yahoo.com/quote/"+ticker);
-      }
-      
-	  public void get () {
-    /* get - method that does the get request                                                                        */
+		ticker = _ticker;
+	}
+
+	public void get() {
+	/* get - method that does the get request                                                                        */
     /* ============================================================================================================= */
     /* ------------------------------------------------------------------------------------------------------------- */
     /*                                                                                                               */
@@ -83,7 +78,7 @@ public class UpdateQuotes {
     /* ------------------------------------------------------------------------------------------------------------- */
     /*                                                                                                               */
     /* Processing:                                                                                                   */
-    /*   set HTTP header;                                                                                            */
+    /*   set HTTP get request;                                                                                       */
     /*   execute request;                                                                                            */
     /*   read result and extract previous closing price;                                                             */
     /*                                                                                                               */
@@ -98,40 +93,40 @@ public class UpdateQuotes {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-	    {try {Log.d("rtnv","in try"); 
-	      getRequest.setHeader("Connection"," keep-alive");
-	      HttpResponse rc = client.execute(getRequest);
-	      HttpEntity entity = rc.getEntity();
-	      InputStream inputStream = entity.getContent();
-	      BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream));
-	      result = "";
-	      String line;
-	      int lastSize = 0;
-	      do {
-	        while ((line = bufferedReader.readLine()) != null) {
-	    	  result += line;
-	        }
-	        if (result.length() > lastSize ) {
-	          Log.d("rtnv","Buffer current size: "+result.length());
-	          lastSize = result.length();
-	        }
-	      } while (!result.contains("/html>"));
-	      Pattern p = Pattern.compile("previousClose\":.\"raw\": *([0-9]+.[0-9]+),\"fmt");
-	      Matcher m = p.matcher(result);
-	      if (m.find()){
-	    	  result = m.group(1);
-	      } else {
-	    	  result = "Not found";
-	      }
-	    } 
-	    catch(Exception e){
-		  Log.d("UpdateQuotes","Got an exception when attempting to get a quote");
-		  e.printStackTrace();
-		  result = "Got exception";}
-	    }
-	  }
-	  public String getResult () {
-    /* getResult - getter to return last closing price                                                               */
+		try {
+			Log.d("rtnv", "in try");
+			getRequest = new URL("http://finance.yahoo.com/quote/" + ticker);
+			URLConnection con = getRequest.openConnection();
+			InputStream inputStream = con.getInputStream();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			result = "";
+			String line;
+			int lastSize = 0;
+			do {
+				while ((line = bufferedReader.readLine()) != null) {
+					result += line;
+				}
+				if (result.length() > lastSize) {
+					Log.d("rtnv", "Buffer current size: " + result.length());
+					lastSize = result.length();
+				}
+			} while (!result.contains("/html>"));
+			Pattern p = Pattern.compile("previousClose\": *([0-9]+.[0-9]+),");
+			Matcher m = p.matcher(result);
+			if (m.find()) {
+				result = m.group(1);
+			} else {
+				result = "Not found";
+			}
+		} catch (Exception e) {
+			Log.d("UpdateQuotes", "Got an exception when attempting to get a quote");
+			e.printStackTrace();
+			result = "Got exception";
+		}
+	}
+
+	public String getResult() {
+	/* getResult - getter to return last closing price                                                               */
     /* ============================================================================================================= */
     /* ------------------------------------------------------------------------------------------------------------- */
     /*                                                                                                               */
@@ -160,7 +155,7 @@ public class UpdateQuotes {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-		  return result;
-	  }
+		return result;
+	}
 }
 
