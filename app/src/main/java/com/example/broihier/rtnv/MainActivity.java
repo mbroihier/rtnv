@@ -8,7 +8,6 @@ import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +15,12 @@ import android.widget.TextView;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 
 public class MainActivity extends Activity {
@@ -50,17 +54,19 @@ public class MainActivity extends Activity {
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
 
-	private TextView netValue;
-	private EditText tickerLabel, sharesLabel, valueLabel;
-	private Button addTicker,deleteTicker,nextButton,calculateNetValue;
-	private Stock stock;
-	private List<Stock> stocks;
-	private int numberOfStocks = 0;
-	private int stocksIndex = 0;
-	private boolean autoWrite = false;
-	private QueryThread query;
-	StockDatabaseHelper databaseHelper;
-	SQLiteDatabase db = null;
+    private TextView valueLabel, netValue;
+    private EditText tickerLabel, sharesLabel;
+    private Button addTicker, deleteTicker, nextButton, calculateNetValue;
+    private Stock stock;
+    private List<Stock> stocks;
+    private int numberOfStocks = 0;
+    private int stocksIndex = 0;
+    private boolean autoWrite = false;
+    private QueryThread query;
+    private Map<String,Integer> retry = Collections.synchronizedMap(new HashMap<String,Integer>());
+
+    StockDatabaseHelper databaseHelper;
+    SQLiteDatabase db = null;
 
     /* Method onCreate - initialize objects used by the activity object                                              */
     /* ============================================================================================================= */
@@ -113,60 +119,97 @@ public class MainActivity extends Activity {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		stocks = new ArrayList<Stock>();
-		stock = new Stock("",0.0,0.0);
-		initializeViews();
-		Log.d("rtnv","in onCreate of MainActivity");
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-        Log.d("rtnv","starting QueryThread");
-		query = new QueryThread(new Handler());
-		query.setListener(new QueryThread.Listener<String>() {
-			public void onQueryComplete(String ticker, String value) {
-				Log.d("rtnv","Listener called for ticker:" + ticker + ": "+value);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        stocks = new ArrayList<Stock>();
+        stock = new Stock("", 0.0, 0.0);
+        initializeViews();
+        Log.d("rtnv", "in onCreate of MainActivity");
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Log.d("rtnv", "starting QueryThread");
+        query = new QueryThread(new Handler());
+        query.setListener(new QueryThread.Listener<String>() {
+            public void onQueryComplete(String ticker, String value) {
+                Log.d("rtnv", "Listener called for ticker:" + ticker + ": " + value);
                 for (int index = 0; index < numberOfStocks; index++) {
                     if (stocks.get(index).getTicker().contentEquals(ticker)) {
-                        if (value.equals("Not found")){
+                        if (value.equals("Not found")) {
                             stocks.get(index).setValueOfEachShare(0.0);
+                            if (retry.get(stocks.get(index).getTicker()) == null) {
+                                Log.e("rtnv","No pending operation, this should never happen");
+                            } else {
+                                if (retry.get(stocks.get(index).getTicker()) == 0) {
+                                    Log.e("rtnv","Retry attempted for: "+stocks.get(index).getTicker());
+                                    long now = System.currentTimeMillis();
+                                    long then = System.currentTimeMillis();
+
+                                    while (now - then < 5000) {
+                                        retry.put(stocks.get(index).getTicker(), 1);
+                                        now = System.currentTimeMillis();
+                                    }
+                                    Stock retryStock = new Stock(stocks.get(index).getTicker(),0,0);
+                                    Log.e("rtrv","requeuing "+retryStock.getTicker());
+                                    query.queueQuery(retryStock.getTicker(),retryStock.getTicker());
+                                } else {
+                                    Log.e("rtnv","Retry of "+stocks.get(index).getTicker()+" failed");
+                                }
+                            }
                         } else if (!value.equals("Got exception")) {
-                            stocks.get(index).setValueOfEachShare(Double.parseDouble(value));
+                            try {
+                                stocks.get(index).setValueOfEachShare(Double.parseDouble(value));
+                                retry.remove(stocks.get(index).getTicker());
+                            }
+                            catch (Exception e) {
+                                Log.e("rtnv","error in double: "+value+", ticker was: "+ticker);
+                            };
                         }
                     }
                 }
-			}
-		});
-		query.start();
-		query.getLooper();
-		databaseHelper = new StockDatabaseHelper(this.getApplicationContext());
-		db = databaseHelper.getWritableDatabase();
-		if (db == null) {
-			Log.d("rtnv"," database is not initialized");
-		} else {
- 		  databaseHelper.reset();
-		  boolean done = false;
-		  do {
-			Stock stock = databaseHelper.get();
-			if (stock.getTicker().equals("")){
-				done = true;
-			} else {
-				stocks.add(stock);
-				numberOfStocks++;
-				query.queueQuery(stock.getTicker(),stock.getTicker());
-			}
-		  } while (!done);
-		}
+                double totalNetValue = 0.0;
+                for (int index = 0; index < numberOfStocks; index++) {
+                    totalNetValue += stocks.get(index).getNetValue();
+                }
+                NumberFormat format = NumberFormat.getCurrencyInstance();
+                String formattedNetValue = format.format(totalNetValue);
+                netValue.setText(formattedNetValue);
+            }
 
-	}
+        });
 
-	@Override
+        query.start();
+        query.getLooper();
+        databaseHelper = new StockDatabaseHelper(this.getApplicationContext());
+        db = databaseHelper.getWritableDatabase();
+        if (db == null) {
+            Log.d("rtnv", " database is not initialized");
+        } else {
+            databaseHelper.reset();
+            boolean done = false;
+            do {
+                Stock stock = databaseHelper.get();
+                if (stock.getTicker().equals("")) {
+                    done = true;
+                } else {
+                    stocks.add(stock);
+                    retry.put(stock.getTicker(), 0);
+                    numberOfStocks++;
+                    query.queueQuery(stock.getTicker(), stock.getTicker());
+                }
+            } while (!done);
+        }
+
+    }
+
+    @Override
     public void onDestroy() {
-		super.onDestroy();
+        super.onDestroy();
         query.quit();
-	}
+    }
+
+
     /* Method initializeViews - initializes views of the activity object                                             */
     /* ============================================================================================================= */
     /* ------------------------------------------------------------------------------------------------------------- */
@@ -221,146 +264,168 @@ public class MainActivity extends Activity {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-	public void initializeViews() {
-		tickerLabel = (EditText) findViewById(R.id.tickerLabel);
-		tickerLabel.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(
-					CharSequence c, int start, int before, int count) {
-				if (!autoWrite){
-                  stock.setTicker((c.toString()));
-				}
-			}
-			public void beforeTextChanged(
-					CharSequence c, int start, int count, int after) {
-			}
-			public void afterTextChanged(
-					Editable c) {
-			}
-		});
+    public void initializeViews() {
+        tickerLabel = (EditText) findViewById(R.id.tickerLabel);
+        tickerLabel.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(
+                    CharSequence c, int start, int before, int count) {
+                if (!autoWrite) {
+                    stocksIndex = 0;
+                    stock.setTicker((c.toString()));
+                }
+            }
 
-		sharesLabel = (EditText) findViewById(R.id.sharesLabel);
-		sharesLabel.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(
-					CharSequence c, int start, int before, int count) {
-				if (count > 0 && !autoWrite) {
-                  stock.setNumberOfShares(Double.parseDouble(c.toString()));
-				}
-			}
-			public void beforeTextChanged(
-					CharSequence c, int start, int count, int after) {
-			}
-			public void afterTextChanged(
-					Editable c) {
-			}
-		});
-		valueLabel = (EditText) findViewById(R.id.valueLabel);
-		valueLabel.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(
-					CharSequence c, int start, int before, int count) {
-				if (count > 0 && !autoWrite) {
-                  stock.setValueOfEachShare(Double.parseDouble(c.toString()));
-				}
-			}
-			public void beforeTextChanged(
-					CharSequence c, int start, int count, int after) {
-			}
-			public void afterTextChanged(
-					Editable c) {
-			}
-		});
-		netValue = (TextView) findViewById(R.id.netValue);
+            public void beforeTextChanged(
+                    CharSequence c, int start, int count, int after) {
+            }
 
-		calculateNetValue = (Button) findViewById(R.id.calculateNetValue);
-		calculateNetValue.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				double totalNetValue = 0.0;
-				for (int index=0; index < numberOfStocks; index++){
-					totalNetValue += stocks.get(index).getNetValue();
-				}
-				NumberFormat format = NumberFormat.getCurrencyInstance();
-				String formattedNetValue = format.format(totalNetValue);
-				netValue.setText(formattedNetValue);
-			}
-		});
-		addTicker = (Button) findViewById(R.id.addTicker);
-		addTicker.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (!stock.getTicker().equals("")) {
-                    query.queueQuery(stock.getTicker(),stock.getTicker());
-				  String value = "0.0";
-	              autoWrite = true;
+            public void afterTextChanged(
+                    Editable c) {
+            }
+        });
+
+        sharesLabel = (EditText) findViewById(R.id.sharesLabel);
+        sharesLabel.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(
+                    CharSequence c, int start, int before, int count) {
+                if (count > 0 && !autoWrite) {
+                    stocksIndex = 0;
+                    stock.setNumberOfShares(Double.parseDouble(c.toString()));
+                }
+            }
+
+            public void beforeTextChanged(
+                    CharSequence c, int start, int count, int after) {
+            }
+
+            public void afterTextChanged(
+                    Editable c) {
+            }
+        });
+        valueLabel = (TextView) findViewById(R.id.valueLabel);
+        netValue = (TextView) findViewById(R.id.netValue);
+
+        calculateNetValue = (Button) findViewById(R.id.calculateNetValue);
+        calculateNetValue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                stocksIndex = 0;
+                calculateNetValue.setClickable(false);
+                databaseHelper.reset();
+                boolean done = false;
+                do {
+                    Stock stock = databaseHelper.get();
+                    if (stock.getTicker().equals("")) {
+                        done = true;
+                    } else {
+                        if (retry.get(stock.getTicker())==null) {
+                            retry.put(stock.getTicker(), 0);
+                            query.queueQuery(stock.getTicker(), stock.getTicker());
+                        } else {
+                            Log.e("rtnv","query inhibited for "+stock.getTicker());
+                        }
+                    }
+                } while (!done);
+                calculateNetValue.setClickable(true);
+            }
+        });
+        addTicker = (Button) findViewById(R.id.addTicker);
+        addTicker.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                stocksIndex = 0;
+                if (!stock.getTicker().equals("")) {
+                    query.queueQuery(stock.getTicker(), stock.getTicker());
+                    String value = "0.0";
+                    autoWrite = true;
                     stock.setValueOfEachShare(Double.parseDouble(value));
-				    valueLabel.setText(Double.toString(stock.getValueOfEachShare()));
-				  autoWrite = false;
-				  stocks.add(stock);
-				  long result;
-				  if ((result = databaseHelper.update(stock)) == -1) {
-					  Log.d("rtnv","updating of SQLite database failed");
-				  } else {
-					  Log.d("rtnv","updating of SQLite database was successful, index: "+result);
-				  }
-				  databaseHelper.close();
-				  numberOfStocks++;
-				  stock = new Stock("",0.0,0.0);
-				  Log.d("rtnv","incrementing number of stocks: "+Double.toString(numberOfStocks));
-				} else {
-			      Log.d("rtnv","attempting to add a null stock - inhibit");
-				}
-				autoWrite = true;
-				tickerLabel.setText("");
-				sharesLabel.setText("");
-				valueLabel.setText("");
-				autoWrite = false;
-			}
-		});
-		deleteTicker = (Button) findViewById(R.id.deleteTicker);
-		deleteTicker.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (stock.getTicker().equals("")) {
-				    stock.setTicker(tickerLabel.getText().toString());
-				    Log.d("rtnv","Setting ticker to: "+stock.getTicker());
-				} else {
-					Log.d("rtnv","Ticker to delete: "+stock.getTicker());
-				}
-				for (int index =0; index < numberOfStocks ; index++) {
-					if ((stocks.get(index).getTicker()).equals(stock.getTicker())) {
-						stocks.remove(index);
-						databaseHelper.delete(stock);
-						databaseHelper.close();
-						stock.setTicker("");
-						numberOfStocks--;
-						if (stocksIndex >= numberOfStocks) {
-							stocksIndex = 0;
-						}
-						autoWrite = true;
-						tickerLabel.setText("");
-						sharesLabel.setText("");
-						valueLabel.setText("");
-						autoWrite = false;
-						break;
-					}
-				}
-			}
-		});
-		nextButton = (Button) findViewById(R.id.nextButton);
-		nextButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (numberOfStocks > 0) {
-				  autoWrite = true;
-				  tickerLabel.setText(stocks.get(stocksIndex).getTicker());
-				  sharesLabel.setText(Double.toString(stocks.get(stocksIndex).getNumberOfShares()));
-//					query.queueQuery(stocks.get(stocksIndex).getTicker(),stocks.get(stocksIndex).getTicker());
-                    valueLabel.setText(Double.toString(stocks.get(stocksIndex).getValueOfEachShare()));
-				  autoWrite = false;
-				  stocksIndex++;
-				  if (stocksIndex >= numberOfStocks){
-					stocksIndex = 0;
-				  }
-				}
-			}
-		});
+                    valueLabel.setText(Double.toString(stock.getValueOfEachShare()));
+                    autoWrite = false;
+                    for (int removeIndex = 0; removeIndex < numberOfStocks; removeIndex++) {
+                        if (stock.getTicker().equals(stocks.get(removeIndex).getTicker())) {
+                            stocks.remove(removeIndex);
+                            numberOfStocks--;
+                            break;
+                        }
+                    }
+                    stocks.add(stock);
+                    long result;
+                    if ((result = databaseHelper.update(stock)) == -1) {
+                        Log.d("rtnv", "updating of SQLite database failed");
+                    } else {
+                        Log.d("rtnv", "updating of SQLite database was successful, index: " + result);
+                    }
+                    databaseHelper.close();
+                    numberOfStocks++;
+                    stock = new Stock("", 0.0, 0.0);
+                    Log.d("rtnv", "incrementing number of stocks: " + Double.toString(numberOfStocks));
+                } else {
+                    Log.e("rtnv", "attempting to add a null stock - inhibit");
+                }
+                autoWrite = true;
+                tickerLabel.setText("");
+                sharesLabel.setText("");
+                valueLabel.setText("");
+                autoWrite = false;
+            }
+        });
+        deleteTicker = (Button) findViewById(R.id.deleteTicker);
+        deleteTicker.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                stocksIndex = 0;
+                if (stock.getTicker().equals("")) {
+                    stock.setTicker(tickerLabel.getText().toString());
+                    Log.d("rtnv", "Setting ticker to: " + stock.getTicker());
+                    if (stock.getTicker().equals("")) {
+                        Log.d("rtnv", "nothing to do - returning");
+                        return; // do nothing
+                    }
+                } else {
+                    Log.d("rtnv", "Ticker to delete: " + stock.getTicker());
+                }
+                for (int index = 0; index < numberOfStocks; index++) {
+                    if ((stocks.get(index).getTicker()).equals(stock.getTicker())) {
+                        stocks.remove(index);
+                        databaseHelper.delete(stock);
+                        databaseHelper.close();
+                        stock.setTicker("");
+                        numberOfStocks--;
+                        autoWrite = true;
+                        tickerLabel.setText("");
+                        sharesLabel.setText("");
+                        valueLabel.setText("");
+                        autoWrite = false;
+                        retry.remove(stock.getTicker());
+                        break;
+                    }
+                }
+            }
+        });
+        nextButton = (Button) findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (numberOfStocks > 0) {
+                    Log.d("rtnv", "in Next button handling - stocksIndex is " + stocksIndex + " number of stocks is " + numberOfStocks);
+                    if (stocksIndex >= numberOfStocks) {
+                        Log.d("rtnv", "blanking screen");
+                        autoWrite = true;
+                        tickerLabel.setText("");
+                        sharesLabel.setText("");
+                        valueLabel.setText("");
+                        autoWrite = false;
+                    } else {
+                        Log.d("rtnv", "putting stock info on screen");
+                        autoWrite = true;
+                        tickerLabel.setText(stocks.get(stocksIndex).getTicker());
+                        sharesLabel.setText(Double.toString(stocks.get(stocksIndex).getNumberOfShares()));
+                        valueLabel.setText(Double.toString(stocks.get(stocksIndex).getValueOfEachShare()));
+                        autoWrite = false;
+                        stocksIndex++;
+                        Log.d("rtnv", "stocksIndex after increment " + stocksIndex);
+                    }
+                }
+            }
+        });
 
-		
-	}
+
+    }
 
 }

@@ -116,6 +116,12 @@ public class UpdateQuotes {
 			if (m.find()) {
 				result = m.group(1);
 			} else {
+				Log.d("rtnv","Closing price not found: "+result);
+				Pattern pExist = Pattern.compile("symbol (.*) doesn't exist");
+				Matcher mExist = pExist.matcher(result);
+				if (m.find()) {
+					Log.d("rtnv","Symbol: "+m.group(1)+" was not found");
+				}
 				result = "Not found";
 			}
 		} catch (Exception e) {

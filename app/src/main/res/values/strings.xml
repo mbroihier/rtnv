@@ -12,5 +12,6 @@
     <string name="deleteButton">Delete</string>
     <string name="nextButton">Next</string>
     <string name="calculateNetValueButton">Calculate Net Value</string>
+    <string name="applogo">app logo</string>
 
 </resources>

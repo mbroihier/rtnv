@@ -1,90 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.broihier.rtnv.MainActivity"
-    android:background="#ffffff"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:layout_marginTop="16dp"
-    android:paddingTop="16dp" >
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/tickerLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:hint="@string/tickerSymbol"       
-        android:imeOptions="actionDone"
-        android:inputType="text|textCapCharacters|textNoSuggestions"
-        android:textAlignment="center"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/sharesLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:hint="@string/numberOfShares"
-        android:imeOptions="actionDone"
-        android:inputType="number|numberDecimal"
-        android:textAlignment="center"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/valueLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:hint="@string/valueOfEachShare"
-        android:imeOptions="actionDone"
-        android:inputType="number|numberDecimal"
-        android:textAlignment="center"
-        android:textSize="20sp" />
-    
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#ffffff"
-        android:gravity="center|center"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <Button
-        android:id="@+id/addTicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/enterButton" />
-    <Button
-        android:id="@+id/deleteTicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/deleteButton" />
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nextButton" />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/netValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="30dp"
-        android:text="@string/calculatedNetValue"
-        android:textSize="20sp" />
-    <Button
-        android:id="@+id/calculateNetValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/calculateNetValueButton" />
-        
-</LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
+
+</android.support.design.widget.CoordinatorLayout>

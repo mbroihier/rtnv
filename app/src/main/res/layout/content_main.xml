@@ -1,18 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="16dp"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="0dp"
+    android:background="#ffffff"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    android:paddingTop="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.broihier.rtnv.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:context="com.example.broihier.rtnv.MainActivity">
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/logo"
+        android:id="@+id/imageView"
+        android:contentDescription="@string/applogo" />
+
+    <EditText
+        android:id="@+id/tickerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="center_horizontal"
+        android:hint="@string/tickerSymbol"
+        android:imeOptions="actionDone"
+        android:inputType="text|textCapCharacters|textNoSuggestions"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/sharesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:hint="@string/numberOfShares"
+        android:imeOptions="actionDone"
+        android:inputType="number|numberDecimal"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/valueLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:hint="@string/valueOfEachShare"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#ffffff"
+        android:gravity="center|center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/addTicker"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enterButton" />
+
+        <Button
+            android:id="@+id/deleteTicker"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deleteButton" />
+
+        <Button
+            android:id="@+id/nextButton"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nextButton" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/netValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/calculatedNetValue"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/calculateNetValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/calculateNetValueButton" />
+
+</LinearLayout>
