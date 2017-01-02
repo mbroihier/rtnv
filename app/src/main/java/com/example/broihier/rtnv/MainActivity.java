@@ -155,6 +155,7 @@ public class MainActivity extends Activity {
                                     query.queueQuery(retryStock.getTicker(),retryStock.getTicker());
                                 } else {
                                     Log.e("rtnv","Retry of "+stocks.get(index).getTicker()+" failed");
+                                    retry.remove(stocks.get(index).getTicker());
                                 }
                             }
                         } else if (!value.equals("Got exception")) {

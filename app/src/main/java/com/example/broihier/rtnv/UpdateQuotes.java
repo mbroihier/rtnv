@@ -111,18 +111,26 @@ public class UpdateQuotes {
 					lastSize = result.length();
 				}
 			} while (!result.contains("/html>"));
-			Pattern p = Pattern.compile("previousClose\": *([0-9]+.[0-9]+),");
+			Pattern p = Pattern.compile("previousClose\": *([0-9]+(.[0-9]+){0,1}),");
 			Matcher m = p.matcher(result);
 			if (m.find()) {
 				result = m.group(1);
 			} else {
-				Log.d("rtnv","Closing price not found: "+result);
+				Log.d("rtnv", "previousClose not found: " + result);
 				Pattern pExist = Pattern.compile("symbol (.*) doesn't exist");
 				Matcher mExist = pExist.matcher(result);
-				if (m.find()) {
-					Log.d("rtnv","Symbol: "+m.group(1)+" was not found");
+				if (mExist.find()) {
+					Log.d("rtnv", "Symbol: " + mExist.group(1) + " was not found");
+				} else {
+					Pattern pOther = Pattern.compile("PREV_CLOSE-value[^>]+> *([0-9]+.[0-9]+)");
+					Matcher mOther = pOther.matcher(result);
+					if (mOther.find()) {
+						result = mOther.group(1);
+					} else {
+						Log.d("rtnv", "Search for PREV_CLOSE-value failed too");
+						result = "Not found";
+					}
 				}
-				result = "Not found";
 			}
 		} catch (Exception e) {
 			Log.d("UpdateQuotes", "Got an exception when attempting to get a quote");
