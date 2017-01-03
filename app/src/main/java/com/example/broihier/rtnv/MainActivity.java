@@ -422,7 +422,11 @@ public class MainActivity extends Activity {
                         autoWrite = true;
                         tickerLabel.setText(stocks.get(stocksIndex).getTicker());
                         sharesLabel.setText(Double.toString(stocks.get(stocksIndex).getNumberOfShares()));
-                        valueLabel.setText(Double.toString(stocks.get(stocksIndex).getValueOfEachShare()));
+                        if (stocks.get(stocksIndex).getValueOfEachShare() == 0) {
+                            valueLabel.setText("Not found");
+                        } else {
+                            valueLabel.setText(Double.toString(stocks.get(stocksIndex).getValueOfEachShare()));
+                        }
                         autoWrite = false;
                         stocksIndex++;
                         Log.d("rtnv", "stocksIndex after increment " + stocksIndex);
