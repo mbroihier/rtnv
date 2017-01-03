@@ -166,6 +166,11 @@ public class MainActivity extends Activity {
                             catch (Exception e) {
                                 Log.e("rtnv","error in double: "+value+", ticker was: "+ticker);
                             };
+                        } else {
+                            if (value.equals("Got exception")) {
+                                retry.remove(stocks.get(index).getTicker());
+                                Log.e("rtnv","removing retry entry after exception");
+                            }
                         }
                     }
                 }
