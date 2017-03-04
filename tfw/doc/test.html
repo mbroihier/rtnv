@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title></title>
+</head>
+
+<body>
+<h1></h1>
+
+<script>
+if (typeof(Storage)!=="undefined") {
+  console.log("Yup, we have it");
+  var counter = localStorage.getItem("count");
+  console.log("Current value: "+counter);
+  counter++;
+  localStorage.setItem("count",counter);
+} else {
+  console.log("no we don't");
+}
+</script>
+
+<hr>
+<address></address>
+<!-- hhmts start --> <!-- hhmts end -->
+</body> </html>

@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+#############################################################
+#
+# Usage:  updateTestStatus
+#
+#
+#############################################################
+#
+
+$debug = 0;
+
+@files = glob("TEST.*.RESULTS");
+
+@testIDs = ();
+
+foreach $file (@files) {
+  if (open(STATUS,"<$file") == 0) {
+    print "$file could not be opened.  Terminating.... \n";
+    exit;
+  } 
+
+  while (<STATUS>) {
+    chomp;
+    $_ =~ s/ +//g;
+    push(@testIDs,$_); 
+    $_ = <STATUS>;
+    chomp; chomp;
+    $_ =~ s/ +//g;
+    $testStatus{$testIDs[$#testIDs]} = $_;
+    $testStatusFile{$testIDs[$#testIDs]} = $file;
+  }
+  close(STATUS);
+}
+
+if (open(LOG,"<TEST.LOG") == 0) {
+  print "TEST.LOG could not be found.  Terminating.....\n";
+  exit;
+}
+
+%rebuildTestStatusFile = ();
+$sync = "Expecting ID";
+$skipThisId = 1;
+while(<LOG>) {
+  if ($_ =~ /^ID:|^Results:/) {
+    if (($_ =~ /^ID:/) && ($sync eq "Expecting ID")) {
+      $id = $';
+      chomp($id);
+      $id =~ s/ +//g;
+      if ($skipThisId) {
+        $skipThisId = 0;
+      } else {
+        $sync = "Expecting Results";
+      }
+    } elsif (($_ =~ /^Results:/) && ($sync eq "Expecting Results")) {
+      $result = $';
+      chomp($id);
+      $result =~ s/ +//g;
+      chomp($result);
+      $sync = "Expecting ID";
+      if ($testStatus{$id} ne '') {
+        $testStatus{$id} = $result;
+        $rebuildTestStatusFile{$testStatusFile{$id}} = "do it";
+      } else {
+	print "Unexpected Test ID: $id\n";
+        exit;
+      }
+    } else {
+      print "out of sync - something is wrong with the log file: $_\n";
+      exit;
+    }
+  }
+}
+foreach (keys(%rebuildTestStatusFile)) {
+  $file = $_;
+  open(NEWSTATUS,">$file");
+  foreach (@testIDs) {
+    if ($testStatusFile{$_} eq $file) {
+      print (NEWSTATUS "$_\n");
+      print (NEWSTATUS "$testStatus{$_}\n");
+    }
+  }
+  close(NEWSTATUS);
+}

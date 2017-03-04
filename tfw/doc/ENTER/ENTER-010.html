@@ -1,0 +1,128 @@
+<html>
+<style>
+body { background-color: white; }
+body { font-family: sans-serif; }
+li { font-size: 80%; }
+</style>
+<body>
+<table BORDER WIDTH="90%" NOSAVE >
+<tr NOSAVE>
+<td>
+Test Case
+</td>
+<td>
+ENTER-010
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+System Test
+</td>
+<td>
+PHS
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Title
+</td>
+<td>
+Pressing Enter when there is a Valid Ticker Symbol and Valid Number of Shares
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Objective
+</td>
+<td>
+This test case is intended to verify the following implied or specified requirements:
+<br>
+<ul>
+<li> When the enter button is pressed, rtnv shall send a retrieve request to the public server if the ticker field is not empty.</li>
+<li> rtnv shall store a persistent copy of the ticker, number of shares, and value of each share in the persistent database.</li>
+<li> rtnv shall clear the ticker, number of shares, and value of each share fields at completion of processing.</li>
+</ul>
+The objective of this test case is to verify the requirements identified above which cover the normal entry of a stock into the portfolio.<br>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Setup
+</td>
+<td>
+<ul>
+<li TYPE=CIRCLE> 
+</li>
+</ul>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Actions
+</td>
+<td>
+<ol>
+<li VALUE=1> Delete the app from the target device.</li>
+<li VALUE=2> Compile and load rtnv onto the target Android device.</li>
+<li VALUE=3> Verify the compile completes with no errors.</li>
+<li VALUE=4> Verify the installation completes with no errors.</li>
+<li VALUE=5> Select the "Ticker Symbol" field and enter the ticker value of AAPL.</li>
+<li VALUE=6> Select the "Number of Shares" field and enter the value 200.</li>
+<li VALUE=7> Press the "Enter" button.</li>
+<li VALUE=8> Verify a "blank" sceen is displayed.</li>
+<li VALUE=9> Select the "Ticker Symbol" field and enter the ticker value of INTC.</li>
+<li VALUE=10> Select the "Number of Shares" field and enter the value 500.</li>
+<li VALUE=11> Press the "Enter" button.</li>
+<li VALUE=12> Verify a "blank" screen is displayed.</li>
+<li VALUE=13> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
+<li VALUE=14> Press the "Next" button again and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.</li>
+<li VALUE=15> Press the "Next" button again and verify that a "blank" screen is displayed.</li>
+</ol>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Expected
+</td>
+<td>
+With normal entry of a stock into the portfolio, the stock will be entered, the public server will retrieve the last closing price, and the stock will stored into the persistent database.  The pressing of "Next" will illustrate that the stock was read from the database and that the public query will have updated the closing value.
+<br>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Results
+</td>
+<td>
+PASSED
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Cleanup
+</td>
+<td>
+Unnecessary
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Requirements
+</td>
+<td>
+RTNV-PR-ENTER-010, RTNV-PR-ENTER-010.001, RTNV-PR-ENTER-010.005
+</td>
+</tr>
+</tr>
+</table>
+</body>
+</html>

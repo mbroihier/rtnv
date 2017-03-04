@@ -1,0 +1,130 @@
+<html>
+<style>
+body { background-color: white; }
+body { font-family: sans-serif; }
+li { font-size: 80%; }
+</style>
+<body>
+<table BORDER WIDTH="90%" NOSAVE >
+<tr NOSAVE>
+<td>
+Test Case
+</td>
+<td>
+NEXT-010
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+System Test
+</td>
+<td>
+PHS
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Title
+</td>
+<td>
+First button press displays first portfolio entry
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Objective
+</td>
+<td>
+This test case is intended to verify the following implied or specified requirements:
+<br>
+<ul>
+<li> When the next button is pressed and it is the first press after any other button press, rtnv shall display the first stock in the the persistent copy of the portfolio.</li>
+</ul>
+This test case verifies that the app displays the first entry of the portfolio if it is the first "Next" press in a sequence of other actions.<br>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Setup
+</td>
+<td>
+<ul>
+<li TYPE=CIRCLE> 
+</li>
+</ul>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Actions
+</td>
+<td>
+<ol>
+<li VALUE=1> Delete the app from the target device.</li>
+<li VALUE=2> Compile and load rtnv onto the target Android device.</li>
+<li VALUE=3> Verify the compile completes with no errors.</li>
+<li VALUE=4> Verify the installation completes with no errors.</li>
+<li VALUE=5> Select the "Ticker Symbol" field and enter the ticker value of AAPL.</li>
+<li VALUE=6> Select the "Number of Shares" field and enter the value 200.</li>
+<li VALUE=7> Press the "Enter" button.</li>
+<li VALUE=8> Verify a "blank" sceen is displayed.</li>
+<li VALUE=9> Select the "Ticker Symbol" field and enter the ticker value of INTC.</li>
+<li VALUE=10> Select the "Number of Shares" field and enter the value 500.</li>
+<li VALUE=11> Press the "Enter" button.</li>
+<li VALUE=12> Verify a "blank" screen is displayed.</li>
+<li VALUE=13> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
+<li VALUE=14> Select the "Ticker Symbol" field and overwrite the AAPL entry with SBUX.</li>
+<li VALUE=15> Select the "Number of Shares" field and overwrite the field entry with 800.</li>
+<li VALUE=16> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
+<li VALUE=17> Select the "Ticker Symbol" field and overwrite the AAPL entry with NFG.</li>
+<li VALUE=18> Select the "Number of Shares" field and overwrite the field entry with 300.</li>
+<li VALUE=19> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
+</ol>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Expected
+</td>
+<td>
+When the first "Next" of a button push sequence is entered, the first entry of the portfolio is entered.
+<br>
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Results
+</td>
+<td>
+PASSED
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Cleanup
+</td>
+<td>
+Unnecessary
+</td>
+</tr>
+</tr>
+<tr NOSAVE>
+<td>
+Requirements
+</td>
+<td>
+RTNV-PR-NEXT-010
+</td>
+</tr>
+</tr>
+</table>
+</body>
+</html>

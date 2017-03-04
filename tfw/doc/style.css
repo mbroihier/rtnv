@@ -1,0 +1,11 @@
+table {
+    width: 90%;
+}
+
+table,td,tr,th {
+   empty-cells: show;
+   border: 2px solid #000;
+   border-collapse: collapse;
+   
+}
+.failed { color: red }
