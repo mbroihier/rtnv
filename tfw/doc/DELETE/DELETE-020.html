@@ -1,137 +1,81 @@
-<html>
+<?xml version="1.0" ?><html>
 <style>
 body { background-color: white; }
 body { font-family: sans-serif; }
 li { font-size: 80%; }
 </style>
 <body>
-<table BORDER WIDTH="90%" NOSAVE >
-<tr NOSAVE>
+<table BORDER="" WIDTH="90%">
+<tr>
 <td>
 Test Case
 </td>
-<td>
-DELETE-020
-</td>
+<td id="testCaseId">
+DELETE-020</td>
 </tr>
-</tr>
-<tr NOSAVE>
-<td>
-System Test
-</td>
-<td>
-PHS
-</td>
-</tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Title
 </td>
-<td>
-Pressing "Delete", when there is nothing on the display does nothing
-</td>
+<td id="title">
+Pressing &quot;Delete&quot;, when there is nothing on the display does nothing</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Objective
 </td>
-<td>
-This test case is intended to verify the following implied or specified requirements:
-<br>
-<ul>
-<li> When the delete button is pressed, rtnv shall do nothing if the ticker field is empty.</li>
-</ul>
-This test case verifies that pressing the delete key when the ticker field is null does nothing.<br>
-</td>
+<td id="objective"><p>This test case is intended to verify the following implied or specified requirements:</p>
+<ul id="requirementsList">
+<li>When the delete button is pressed, rtnv shall do nothing if the ticker field is empty.</li></ul>
+<p>This test case verifies that pressing the delete key when the ticker field is null does nothing.</p></td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Setup
 </td>
 <td>
-<ul>
-<li TYPE=CIRCLE> 
-</li>
-</ul>
+<ul id="setup">
+<li></li></ul>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Actions
 </td>
 <td>
-<ol>
-<li VALUE=1> Delete the app from the target device.</li>
-<li VALUE=2> Compile and load rtnv onto the target Android device.</li>
-<li VALUE=3> Verify the compile completes with no errors.</li>
-<li VALUE=4> Verify the installation completes with no errors.</li>
-<li VALUE=5> Select the "Ticker Symbol" field and enter the ticker value of AAPL.</li>
-<li VALUE=6> Select the "Number of Shares" field and enter the value 200.</li>
-<li VALUE=7> Press the "Enter" button.</li>
-<li VALUE=8> Select the "Ticker Symbol" field and enter the ticker value of INTC.</li>
-<li VALUE=9> Select the "Number of Shares" field and enter the value 500.</li>
-<li VALUE=10> Press the "Enter" button.</li>
-<li VALUE=11> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=12> Press the "Delete" button and verify that the screen is "blanked".</li>
-<li VALUE=13> Press the "Next" button and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=14> Press the "Delete" button and verify that the screen is "blanked".</li>
-<li VALUE=15> Press the "Delete" button and verify that the screen remains the same.</li>
-<li VALUE=16> Select the "Ticker Symbol" field and enter the ticker value of AAPL.</li>
-<li VALUE=17> Select the "Number of Shares" field and enter the value 200.</li>
-<li VALUE=18> Press the "Enter" button.</li>
-<li VALUE=19> Select the "Ticker Symbol" field and enter the ticker value of INTC.</li>
-<li VALUE=20> Select the "Number of Shares" field and enter the value 500.</li>
-<li VALUE=21> Press the "Enter" button.</li>
-<li VALUE=22> Press the "Delete" button (with the field null).</li>
-<li VALUE=23> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=24> Press the "Delete" button and verify that the screen is "blanked".</li>
-<li VALUE=25> Press the "Next" button and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=26> Press the "Delete" button and verify that the screen is "blanked".</li>
-<li VALUE=27> Press the "Delete" button and verify that the screen remains the same.</li>
-</ol>
+<ol id="actions">
+<li> Delete the app from the target device.   </li><li> Compile and load rtnv onto the target Android device.   </li><li> Verify the compile completes with no errors.   </li><li> Verify the installation completes with no errors.   </li><li> Select the &quot;Ticker Symbol&quot; field and enter the ticker value of AAPL.   </li><li> Select the &quot;Number of Shares&quot; field and enter the value 200.   </li><li> Press the &quot;Enter&quot; button.   </li><li> Select the &quot;Ticker Symbol&quot; field and enter the ticker value of INTC.   </li><li> Select the &quot;Number of Shares&quot; field and enter the value 500.   </li><li> Press the &quot;Enter&quot; button.   </li><li> Press the &quot;Next&quot; button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Delete&quot; button and verify that the screen is &quot;blanked&quot;.   </li><li> Press the &quot;Next&quot; button and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Delete&quot; button and verify that the screen is &quot;blanked&quot;.   </li><li> Press the &quot;Delete&quot; button and verify that the screen remains the same.   </li><li> Select the &quot;Ticker Symbol&quot; field and enter the ticker value of AAPL.   </li><li> Select the &quot;Number of Shares&quot; field and enter the value 200.   </li><li> Press the &quot;Enter&quot; button.   </li><li> Select the &quot;Ticker Symbol&quot; field and enter the ticker value of INTC.   </li><li> Select the &quot;Number of Shares&quot; field and enter the value 500.   </li><li> Press the &quot;Enter&quot; button.   </li><li> Press the &quot;Delete&quot; button (with the field null).  </li><li> Press the &quot;Next&quot; button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Delete&quot; button and verify that the screen is &quot;blanked&quot;.   </li><li> Press the &quot;Next&quot; button and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Delete&quot; button and verify that the screen is &quot;blanked&quot;.   </li><li> Press the &quot;Delete&quot; button and verify that the screen remains the same. </li></ol>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Expected
 </td>
-<td>
-If the ticker symbol field is null, pressing the delete button will do nothing.
-<br>
-</td>
+<td id="expected">
+If the ticker symbol field is null, pressing the delete button will do nothing.</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Results
 </td>
-<td>
-FAILED
-</td>
+<td id="results">
+FAILED</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Cleanup
 </td>
 <td>
-Unnecessary
+<ul id="cleanup">
+<li>Unnecessary</li></ul>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Requirements
 </td>
-<td>
-RTNV-PR-DELETE-020
-</td>
-</tr>
+<td id="requirements">
+RTNV-PR-DELETE-020</td>
 </tr>
 </table>
 </body>

@@ -1,121 +1,81 @@
-<html>
+<?xml version="1.0" ?><html>
 <style>
 body { background-color: white; }
 body { font-family: sans-serif; }
 li { font-size: 80%; }
 </style>
 <body>
-<table BORDER WIDTH="90%" NOSAVE >
-<tr NOSAVE>
+<table BORDER="" WIDTH="90%">
+<tr>
 <td>
 Test Case
 </td>
-<td>
-ENTER-040
-</td>
+<td id="testCaseId">
+ENTER-040</td>
 </tr>
-</tr>
-<tr NOSAVE>
-<td>
-System Test
-</td>
-<td>
-PHS
-</td>
-</tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Title
 </td>
-<td>
-Pressing Enter when there is a Valid Ticker Symbol but no Number of Shares Entered
-</td>
+<td id="title">
+Pressing Enter when there is a Valid Ticker Symbol but no Number of Shares Entered</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Objective
 </td>
-<td>
-This test case is intended to verify the following implied or specified requirements:
-<br>
-<ul>
-<li> When the enter button is pressed, rtnv shall send a retrieve request to the public server if the ticker field is not empty.</li>
-<li> rtnv shall store a persistent copy of the ticker, number of shares, and value of each share in the persistent database.</li>
-<li> rtnv shall store zero as the number of shares if the number of shares was not entered by the user.</li>
-<li> rtnv shall clear the ticker, number of shares, and value of each share fields at completion of processing.</li>
-</ul>
-The objective of this test case is to verify the requirements identified above which cover the entry of a stock into the portfolio which exists in the public server, but the user did not specify the number of shares in the portfolio.<br>
-</td>
+<td id="objective"><p>This test case is intended to verify the following implied or specified requirements:</p>
+<ul id="requirementsList">
+<li>When the enter button is pressed, rtnv shall send a retrieve request to the public server if the ticker field is not empty.</li><li>rtnv shall store a persistent copy of the ticker, number of shares, and value of each share in the persistent database.</li><li>rtnv shall store zero as the number of shares if the number of shares was not entered by the user.</li><li>rtnv shall clear the ticker, number of shares, and value of each share fields at completion of processing.</li></ul>
+<p>The objective of this test case is to verify the requirements identified above which cover the entry of a stock into the portfolio which exists in the public server, but the user did not specify the number of shares in the portfolio.</p></td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Setup
 </td>
 <td>
-<ul>
-<li TYPE=CIRCLE> Test case ENTER-030 was immediately executed prior to this test case.
-</li>
-</ul>
+<ul id="setup">
+<li>Test case ENTER-030 was immediately executed prior to this test case.</li></ul>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Actions
 </td>
 <td>
-<ol>
-<li VALUE=1> Select the "Ticker Symbol" field and enter the value JNJ.</li>
-<li VALUE=2> Press the "Enter" button.</li>
-<li VALUE=3> Verify a "blank" screen is displayed.</li>
-<li VALUE=4> Press the "Next" button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=5> Press the "Next" button again and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=6> Press the "Next" button again and verify that the symbol AAA is displayed with 1 share and that "Not found" is displayed for the last closing price of the stock.</li>
-<li VALUE=7> Press the "Next" button again and verify that the symbol JNJ is displayed with 0 shares and a non zero value is displayed for the last closing price of the stock.</li>
-<li VALUE=8> Press the "Next" button again and verify that a "blank" screen is displayed.</li>
-</ol>
+<ol id="actions">
+<li> Select the &quot;Ticker Symbol&quot; field and enter the value JNJ.  </li><li> Press the &quot;Enter&quot; button.  </li><li> Verify a &quot;blank&quot; screen is displayed.  </li><li> Press the &quot;Next&quot; button and verify that the symbol AAPL is displayed with 200 shares and that a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Next&quot; button again and verify that the symbol INTC is displayed with 500 shares and that a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Next&quot; button again and verify that the symbol AAA is displayed with 1 share and that &quot;Not found&quot; is displayed for the last closing price of the stock.  </li><li> Press the &quot;Next&quot; button again and verify that the symbol JNJ is displayed with 0 shares and a non zero value is displayed for the last closing price of the stock.  </li><li> Press the &quot;Next&quot; button again and verify that a &quot;blank&quot; screen is displayed. </li></ol>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Expected
 </td>
-<td>
-If the number of shares is not defined by the operator, the default number of shares is zero.
-<br>
-</td>
+<td id="expected">
+If the number of shares is not defined by the operator, the default number of shares is zero.</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Results
 </td>
-<td>
-PASSED
-</td>
+<td id="results">
+PASSED</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Cleanup
 </td>
 <td>
-Unnecessary
+<ul id="cleanup">
+<li>Unnecessary</li></ul>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Requirements
 </td>
-<td>
-RTNV-PR-ENTER-010, RTNV-PR-ENTER-010.001, RTNV-PR-ENTER-010.003, RTNV-PR-ENTER-010.005
-</td>
-</tr>
+<td id="requirements">
+RTNV-PR-ENTER-010, RTNV-PR-ENTER-010.001, RTNV-PR-ENTER-010.003, RTNV-PR-ENTER-010.005</td>
 </tr>
 </table>
 </body>

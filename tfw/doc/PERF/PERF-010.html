@@ -1,125 +1,81 @@
-<html>
+<?xml version="1.0" ?><html>
 <style>
 body { background-color: white; }
 body { font-family: sans-serif; }
 li { font-size: 80%; }
 </style>
 <body>
-<table BORDER WIDTH="90%" NOSAVE >
-<tr NOSAVE>
+<table BORDER="" WIDTH="90%">
+<tr>
 <td>
 Test Case
 </td>
-<td>
-PERF-010
-</td>
+<td id="testCaseId">
+PERF-010</td>
 </tr>
-</tr>
-<tr NOSAVE>
-<td>
-System Test
-</td>
-<td>
-PHS
-</td>
-</tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Title
 </td>
-<td>
-rtnv meets its time and capacity requirements
-</td>
+<td id="title">
+rtnv meets its time and capacity requirements</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Objective
 </td>
-<td>
-This test case is intended to verify the following implied or specified requirements:
-<br>
-<ul>
-<li> rtnv shall be able to display the main menu within 20 seconds of selecting the app from the Android menu given 20 stocks in the portfolio and access to the internet.</li>
-<li> rtnv shall be able to store at least 20 stocks in the portfolio.</li>
-<li> When the calculate net value button is pressed, the sum of the products of the number of shares and value of each share shall be calcuated and that total displayed (in dollar format) in the calculated net value display field.</li>
-<li> rtnv shall use a public server such as Yahoo finance to retrieve the closing prices of stocks identified by the ticker symbols.  Note: this is a demonstration app only and is not meant to be massively distributed for large scale use.</li>
-</ul>
-The objective of this test case is to verify that the app can update a portfolio populated to the maximum required size within the time limit of the requirements.<br>
-</td>
+<td id="objective"><p>This test case is intended to verify the following implied or specified requirements:</p>
+<ul id="requirementsList">
+<li>rtnv shall be able to display the main menu within 20 seconds of selecting the app from the Android menu given 20 stocks in the portfolio and access to the internet.</li><li>rtnv shall be able to store at least 20 stocks in the portfolio.</li><li>When the calculate net value button is pressed, the sum of the products of the number of shares and value of each share shall be calcuated and that total displayed (in dollar format) in the calculated net value display field.</li><li>rtnv shall use a public server such as Yahoo finance to retrieve the closing prices of stocks identified by the ticker symbols.  Note: this is a demonstration app only and is not meant to be massively distributed for large scale use.</li></ul>
+<p>The objective of this test case is to verify that the app can update a portfolio populated to the maximum required size within the time limit of the requirements.</p></td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Setup
 </td>
 <td>
-<ul>
-<li TYPE=CIRCLE> 
-</li>
-</ul>
+<ul id="setup">
+<li></li></ul>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Actions
 </td>
 <td>
-<ol>
-<li VALUE=1> Delete the app from the target device.</li>
-<li VALUE=2> Compile and load rtnv onto the target Android device.</li>
-<li VALUE=3> Verify the compile completes with no errors.</li>
-<li VALUE=4> Verify the installation completes with no errors.</li>
-<li VALUE=5> Using any method desired, enter 20 valid ticker symbols each with a user defined number of shares.</li>
-<li VALUE=6> Select the Android main lauch menu.</li>
-<li VALUE=7> Select the Andriod task list and terminate rtnv.</li>
-<li VALUE=8> From the launch menu, start rtnv and note the time.</li>
-<li VALUE=9> Press the Calculate Net Value button and determine when the net value stops changing.</li>
-<li VALUE=10> Verify that time is less than 20 seconds.</li>
-<li VALUE=11> Press the "Next" button and walk through the portfolio verifying that every entry has a non zero share value.</li>
-<li VALUE=12> Record the product of the number of shares and value of each share. Sum those products and verify that they equal the value displayed in the "Calculated Net Value" field.</li>
-</ol>
+<ol id="actions">
+<li> Delete the app from the target device.   </li><li> Compile and load rtnv onto the target Android device.   </li><li> Verify the compile completes with no errors.   </li><li> Verify the installation completes with no errors.   </li><li> Using any method desired, enter 20 valid ticker symbols each with a user defined number of shares.   </li><li> Select the Android main lauch menu.   </li><li> Select the Andriod task list and terminate rtnv.   </li><li> From the launch menu, start rtnv and note the time.   </li><li> Press the Calculate Net Value button and determine when the net value stops changing.   </li><li> Verify that time is less than 20 seconds.   </li><li> Press the &quot;Next&quot; button and walk through the portfolio verifying that every entry has a non zero share value.  </li><li> Record the product of the number of shares and value of each share. Sum those products and verify that they equal the value displayed in the &quot;Calculated Net Value&quot; field. </li></ol>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Expected
 </td>
-<td>
-The twenty stocks will be be updated within 20 seconds and the calcuated net value will match the value calculated by hand.
-<br>
-</td>
+<td id="expected">
+The twenty stocks will be be updated within 20 seconds and the calcuated net value will match the value calculated by hand.</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Results
 </td>
-<td>
-FAILED
-</td>
+<td id="results">
+FAILED</td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Cleanup
 </td>
 <td>
-Unnecessary
+<ul id="cleanup">
+<li>Unnecessary</li></ul>
 </td>
 </tr>
-</tr>
-<tr NOSAVE>
+<tr>
 <td>
 Requirements
 </td>
-<td>
-RTNV-PERF-010, RTNV-PROV-020, RTNV-PR-CNV-010, RTNV-EXT-IF-060
-</td>
-</tr>
+<td id="requirements">
+RTNV-PERF-010, RTNV-PROV-020, RTNV-PR-CNV-010, RTNV-EXT-IF-060</td>
 </tr>
 </table>
 </body>
