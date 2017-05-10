@@ -95,7 +95,8 @@ public class UpdateQuotes {
     /* ============================================================================================================= */
 		try {
 			Log.d("rtnv", "in try");
-			getRequest = new URL("http://finance.yahoo.com/quote/" + ticker);
+			//getRequest = new URL("http://finance.yahoo.com/quote/" + ticker);
+			getRequest = new URL("https://finance.yahoo.com/quote/" + ticker);
 			URLConnection con = getRequest.openConnection();
 			InputStream inputStream = con.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
