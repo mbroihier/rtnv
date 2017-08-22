@@ -2,6 +2,14 @@ package com.example.broihier.rtnv;
 
 import android.util.Log;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.Elements;
+import org.w3c.dom.Document;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,6 +17,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class UpdateQuotes {
     /* UpdateQuotes class                                                                                            */
@@ -111,28 +121,24 @@ public class UpdateQuotes {
 					Log.d("rtnv", "Buffer current size: " + result.length());
 					lastSize = result.length();
 				}
-			} while (!result.contains("/html>"));
-			Pattern p = Pattern.compile("previousClose\": *([0-9]+(.[0-9]+){0,1}),");
-			Matcher m = p.matcher(result);
-			if (m.find()) {
-				result = m.group(1);
-			} else {
-				Log.d("rtnv", "previousClose not found: " + result);
-				Pattern pExist = Pattern.compile("symbol (.*) doesn't exist");
-				Matcher mExist = pExist.matcher(result);
-				if (mExist.find()) {
-					Log.d("rtnv", "Symbol: " + mExist.group(1) + " was not found");
-				} else {
-					Pattern pOther = Pattern.compile("PREV_CLOSE-value[^>]+> *([0-9]+.[0-9]+)");
-					Matcher mOther = pOther.matcher(result);
-					if (mOther.find()) {
-						result = mOther.group(1);
-					} else {
-						Log.d("rtnv", "Search for PREV_CLOSE-value failed too");
-						result = "Not found";
-					}
-				}
-			}
+			} while (line != null );
+            org.jsoup.nodes.Document doc = Jsoup.parse(result);
+			Elements elements = doc.getElementsByTag("span");
+            Pattern previousClose = Pattern.compile("Prev Close");
+            String value = "";
+            for (Element e : elements) {
+                Matcher label = previousClose.matcher(e.html());
+                if (label.find()) {
+                    value = e.nextElementSibling().html();
+                    break;
+                }
+            }
+            Log.d("rtnv", "value found with jsoup: " + value);
+            if (value.equals("")) {
+                result = "Not found";
+            } else {
+                result = value;
+            }
 		} catch (Exception e) {
 			Log.d("UpdateQuotes", "Got an exception when attempting to get a quote");
 			e.printStackTrace();
