@@ -3,18 +3,10 @@ package com.example.broihier.rtnv;
 import android.util.Log;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Document;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,9 +22,8 @@ public class UpdateQuotes {
     /*                                                                                                               */
     /* ------------------------------------------------------------------------------------------------------------- */
     /* ============================================================================================================= */
-	String ticker;
-	URL getRequest = null;
-	String result = null;
+	private String ticker;
+	private String result = null;
 
 	public void setTicker(String _ticker) {
 	/* setTicker - method that sets the ticker that is to be read from the web                                       */
@@ -105,24 +96,7 @@ public class UpdateQuotes {
     /* ============================================================================================================= */
 		try {
 			Log.d("rtnv", "in try");
-			//getRequest = new URL("http://finance.yahoo.com/quote/" + ticker);
-			getRequest = new URL("https://finance.yahoo.com/quote/" + ticker);
-			URLConnection con = getRequest.openConnection();
-			InputStream inputStream = con.getInputStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-			result = "";
-			String line;
-			int lastSize = 0;
-			do {
-				while ((line = bufferedReader.readLine()) != null) {
-					result += line;
-				}
-				if (result.length() > lastSize) {
-					Log.d("rtnv", "Buffer current size: " + result.length());
-					lastSize = result.length();
-				}
-			} while (line != null );
-            org.jsoup.nodes.Document doc = Jsoup.parse(result);
+			Document doc = Jsoup.connect("https://finance.yahoo.com/quote/" + ticker).userAgent("Chrome for Android").get();
 			Elements elements = doc.getElementsByTag("span");
             Pattern previousClose = Pattern.compile("Prev Close");
             String value = "";
