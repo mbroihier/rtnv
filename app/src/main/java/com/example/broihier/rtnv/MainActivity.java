@@ -165,7 +165,7 @@ public class MainActivity extends Activity {
                             }
                             catch (Exception e) {
                                 Log.e("rtnv","error in double: "+value+", ticker was: "+ticker);
-                            };
+                            }
                         } else {
                             if (value.equals("Got exception")) {
                                 retry.remove(stocks.get(index).getTicker());
@@ -317,6 +317,7 @@ public class MainActivity extends Activity {
                 stocksIndex = 0;
                 calculateNetValue.setClickable(false);
                 databaseHelper.reset();
+                netValue.setText(R.string.calculatedNetValue);
                 boolean done = false;
                 do {
                     Stock stock = databaseHelper.get();
@@ -400,6 +401,7 @@ public class MainActivity extends Activity {
                         valueLabel.setText("");
                         autoWrite = false;
                         retry.remove(stock.getTicker());
+                        calculateNetValue.callOnClick();
                         break;
                     }
                 }
@@ -417,6 +419,7 @@ public class MainActivity extends Activity {
                         sharesLabel.setText("");
                         valueLabel.setText("");
                         autoWrite = false;
+                        stocksIndex = 0;
                     } else {
                         Log.d("rtnv", "putting stock info on screen");
                         autoWrite = true;
