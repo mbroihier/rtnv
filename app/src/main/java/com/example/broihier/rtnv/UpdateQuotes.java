@@ -98,13 +98,27 @@ public class UpdateQuotes {
 			Log.d("rtnv", "in try");
 			Document doc = Jsoup.connect("https://finance.yahoo.com/quote/" + ticker).userAgent("Chrome for Android").get();
 			Elements elements = doc.getElementsByTag("span");
-            Pattern previousClose = Pattern.compile("Prev Close");
+            Pattern previousClose = Pattern.compile("Previous Close");
+            Pattern valuePattern = Pattern.compile("-->(\\d+\\.?\\d*)");
             String value = "";
+            boolean previousCloseFound = false;
             for (Element e : elements) {
                 Matcher label = previousClose.matcher(e.html());
                 if (label.find()) {
-                    value = e.nextElementSibling().html();
-                    break;
+					Log.d("rtnv", "previous close pattern was found");
+					previousCloseFound = true;
+//				} else {
+//					Log.d("rtnv", e.toString());
+				}
+				Matcher valueMatcher = valuePattern.matcher(e.html());
+				if (previousCloseFound && valueMatcher.find()) {
+					int count = valueMatcher.groupCount();
+					Log.d("rtnv", "value pattern found, count: " + count);
+					if (valueMatcher.groupCount() != 1) {
+						Log.e("rtnv", "Warning - expecting a count of 1, got: " + count);
+					}
+					value = valueMatcher.group(1);
+					break;
                 }
             }
             Log.d("rtnv", "value found with jsoup: " + value);
